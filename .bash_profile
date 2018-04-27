@@ -295,3 +295,33 @@ httpHeaders () { /usr/bin/curl -I -L $@ ; }             # httpHeaders:      Grab
 #   e.g.: hdiutil create -size 10m 10MB.dmg
 #   the above create files that are almost all zeros - if random bytes are desired
 #   then use: ~/Dev/Perl/randBytes 1048576 > 10MB.dat
+
+#   ----------------------------------------                                                           
+#   10. Cisco stuff                                                                                    
+#   ----------------------------------------                                                           
+pathadd() {                                                                                            
+    if [ -d "$1" ] && [[ ":$PATH:" != *":$1:"* ]]; then                                                
+        PATH="$1:$PATH"                                                                                
+    fi                                                                                                 
+}                                                                                                      
+                                                                                                       
+if [[ $- == *i* ]]                                                                                     
+then                                                                                                   
+    LS_COLORS='di=1;34:fi=0:ln=31:pi=5:so=5:bd=5:cd=5:or=31:mi=0:ex=1;36:*.rpm=90:*.tar=1;31'          
+    export LS_COLORS                                                                                   
+    CYANCOLOR='\[\e[1;36m\]';                                                                          
+    REDCOLOR='\[\e[1;31m\]';                                                                           
+    GREENCOLOR='\[\e[1;32m\]';                                                                         
+    WHITECOLOR='\[\e[1;37m\]';                                                                         
+    BLUECOLOR='\[\e[1;34m\]';                                                                          
+    YELLOWCOLOR='\[\e[1;33m\]';                                                                        
+    alias niceup='export PS1="$BLUECOLOR`whoami`$WHITECOLOR $YELLOWCOLOR(cisco)$REDCOLOR fighting @ $Y\
+\                                                                                                      
+ELLOWCOLOR\W$WHITECOLOR->"'                                                                            
+    alias nicedown='export PS1="\s-\v\$"'                                                              
+fi                                                                                                     
+                                                                                                       
+gmakelog() {                                                                                           
+    echo "error log in /tmp/error_logs.txt"                                                            
+    gmake -j8 $1 2>&1 | tee >(grep "error:" > /tmp/error_logs.txt)                                     
+}
